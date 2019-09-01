@@ -1,0 +1,33 @@
+{
+  "name": "sdclone",
+  "version": "0.0.1",
+  "description": "Shadow Clone -- Automated file checksum",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romplabs/sdclone.git"
+  },
+  "keywords": [
+    "checksum",
+    "cli",
+    "library"
+  ],
+  "author": "John Untivero <jpuntivero@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/romplabs/sdclone/issues"
+  },
+  "homepage": "https://github.com/romplabs/sdclone#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.0",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.3"
+  },
+  "dependencies": {
+    "typescript": "^3.6.2"
+  }
+}
