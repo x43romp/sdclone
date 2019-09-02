@@ -29,3 +29,54 @@ export function expectFile(source: string): boolean {
         return false;
     }
 }
+
+export interface scandirOptions {
+    recursive?: boolean,
+    fullPath?: boolean,
+}
+
+const scandirDefs: scandirOptions = {
+    recursive: true,
+    fullPath: false,
+}
+
+export function scandir(source: string, options?: boolean | scandirOptions): string[] {
+    try {
+        // validate the directory
+        source = normalize(source);
+        expectDir(source);
+
+        // load options
+        options = (typeof options == "boolean") ? { recursive: options } : options;
+        options = (options) ? Object.assign(scandirDefs, options) : scandirDefs;
+
+        // initialize data
+        let data = readdirSync(source);
+        let files: string[] = [];
+
+        for (let file of data) {
+            // add the source path to the file
+            let filepath = join(source, file);
+            // pushes file to files array 
+            if (statSync(filepath).isFile()) { files.push(file); }
+            // if the recursive option is on, handle the directories
+            else if (statSync(filepath).isDirectory() && options.recursive) {
+                // scan the subdirectory
+                let subfiles = scandir(filepath);
+                subfiles = subfiles.map(sub => join(file, sub));
+                // concat subdir files to list
+                files = files.concat(subfiles);
+            }
+        }
+
+        // if fullpath option is on, add sourcedir to filename
+        if (options.fullPath)
+            files = files.map(file => join(source, file));
+
+        // return the final array
+        return files;
+
+    } catch (err) {
+        console.error(err);
+    }
+}
