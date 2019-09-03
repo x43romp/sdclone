@@ -25,9 +25,13 @@
   "devDependencies": {
     "@types/chai": "^4.2.0",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.3"
+    "@types/node": "^12.7.4"
   },
   "dependencies": {
+    "commander": "^3.0.1",
     "typescript": "^3.6.2"
+  },
+  "bin": {
+    "sdclone": "./bin/index.js"
   }
 }
