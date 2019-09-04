@@ -39,6 +39,62 @@ export function expectFile(path: string): boolean {
     return false;
 }
 
+
+
+export interface printProgressOptions {
+    // for counting
+    index?: number,
+    indexTotal?: number,
+
+    // progress
+    progress?: number,
+    progressTotal?: number,
+    progressLength?: number,
+    progressDone?: any,
+
+}
+const printProgressDefs: printProgressOptions = {
+    index: -1, indexTotal: -1,
+    progress: -1, progressTotal: -1,
+    progressLength: 32, progressDone: 'SUCCESS!',
+}
+/**
+ * Creates a progress bar string.
+ * @param subject The identifier of the line
+ * @param options See `printProgressOptions` for more details
+ */
+export function printProgress(subject: string, options: printProgressOptions): string {
+    // load options
+    options = (options) ? Object.assign(scandirDefs, options) : printProgressDefs;
+
+    // create variables
+    let output = [];
+    let fill = 6;
+
+    // create text: " 43 of 100"
+    if (options.indexTotal >= 0) {
+        output.push(`${options.index.toString().padStart(options.indexTotal.toString().length)} of ${options.indexTotal}`);
+    }
+
+    // create text: [######........] 43.9%
+    if (options.progressDone) {
+        output.push(options.progressDone);
+    } else if (options.progressTotal >= 0) {
+        let percent = options.progress / options.progressTotal;
+        let percentText = `${(percent * 100).toFixed(1)}%`.padStart(5);
+        let charDone = '\u2588', charWait = '.';
+        let barLength = options.progressLength - percentText.length - 2 - 1;
+        let bar = charDone.repeat(barLength * percent).padEnd(barLength, charWait);
+        output.push(`[${bar}] ${percentText}`);
+    } else {
+        output.push(`Processing`.padEnd(options.progressLength, '.'));
+    }
+
+    output.push('|', subject);
+
+    return output.join(' ');
+}
+
 export interface scandirOptions {
     recursive?: boolean,
     fullPath?: boolean,
