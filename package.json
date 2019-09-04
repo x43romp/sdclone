@@ -32,6 +32,6 @@
     "typescript": "^3.6.2"
   },
   "bin": {
-    "sdclone": "./bin/index.js"
+    "sdclone": "./dist/index.js"
   }
 }
