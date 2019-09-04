@@ -1,7 +1,9 @@
 import { normalize, parse } from "path";
-import { expectFile, HashTypes } from "./sdTools";
+import { expectFile } from "./sdTools";
 import { statSync, createReadStream, createWriteStream } from "fs";
 import { createHash } from "crypto";
+
+export type HashTypes = "md5" | "sha1";
 
 export interface streamOptions {
     hashtype?: HashTypes;
