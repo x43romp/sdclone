@@ -5,11 +5,19 @@ import { Hash, HashProgress } from './sdHash';
 
 import program = require('commander');
 import readline = require('readline');
+import { Archive } from './sdArchive';
 
 program
     .version('0.0.1')
     .description('Shadow Clone -- Automated file checksum');
 
+program
+    .command('test <path>')
+    .action((path, options) => {
+        let a = new Archive(path);
+        // console.log(a.getFiles());
+        a.stream();
+    });
 
 // Seal command
 program
@@ -65,7 +73,7 @@ program
             time = process.hrtime(time);
 
             // console.log(`This process took ${process.hrtime(time)[0]} seconds`);
-            console.log(`=====\nThis process took ${ (time[0] + time[1] / 1e9).toFixed(3) } seconds\n=====`);
+            console.log(`=====\nThis process took ${(time[0] + time[1] / 1e9).toFixed(3)} seconds\n=====`);
 
 
         } catch (error) {
