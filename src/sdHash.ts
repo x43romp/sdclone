@@ -1,4 +1,4 @@
-import { normalize, parse } from "path";
+import { normalize, parse, join } from "path";
 import { expectFile } from "./sdTools";
 import { statSync, createReadStream, createWriteStream } from "fs";
 import { createHash } from "crypto";
@@ -46,14 +46,16 @@ export class Hash implements HashInterface {
      * @param path string filepath
      * @param options optional configurations
      */
-    constructor(path: string, options?: HashTypes) {
+    constructor(path: string, dir?: string) {
         try {
 
+            let filename = path;
             path = normalize(path);
+            path = (dir) ? join(dir, path) : normalize(path);
             if (!expectFile(path)) throw "invalid file";
 
-            this.filename = parse(path).base;
-            this.filepath = path;
+            this.filename = (dir) ? filename : parse(path).base;
+            this.filepath = (dir) ? join(dir, filename) : path;
             this.filedate = statSync(path).mtime.toISOString();
             this.filesize = statSync(path).size;
 
