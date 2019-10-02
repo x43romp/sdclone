@@ -1,42 +1,39 @@
 import { HashInterface, Hash, HashProgress, HashTypes } from "./sdHash";
 import { directPath, expectDir, scandir, printProgress } from "./sdTools";
-import { join } from "path";
+import { parse } from "path";
 
 export interface ArchiveInterface {
-    archivepath: string;
-    archivefile?: string;
-    archivedate?: string;
-    archivefiles?: string[];
-    archivehash?: Hash[];
-    archivetype?: HashTypes;
+    directory: string;
+    filepath?: string;
+    files?: Hash[];
+    archiveDate?: string;
+    archiveType?: HashTypes;
 }
 
 export class Archive implements ArchiveInterface {
 
-    archivepath: string;
-    archivefile: string;
-    archivedate: string;
-    archivefiles: string[];
-    archivehash: Hash[];
-    archivetype: HashTypes;
+    directory: string;
+    filepath: string;
+    files: Hash[];
+    archiveDate: string;
+    archiveType: HashTypes;
 
     path: string;
-    files?: Hash[];
     savepath?: string;
 
     constructor(path: string, options?: string) {
         // cleanup path
         try {
-            this.archivepath = directPath(path);
-            if (!expectDir(this.archivepath)) {
-                this.archivepath = null;
+            this.directory = directPath(path);
+            if (!expectDir(this.directory)) {
+                this.directory = null;
                 throw "invalid archivepath";
             }
             
             // TODO: create a code that scans for mhl or md5 files in the directory
 
-            this.archivefiles = scandir(this.archivepath);
-            this.archivehash = this.archivefiles.map(file => new Hash(file, path));
+            let fileList: string[] = scandir(this.directory);
+            this.files = fileList.map(file => { return new Hash(file, this.directory); });
         } catch (error) {
             console.error(error);
         }
@@ -44,9 +41,9 @@ export class Archive implements ArchiveInterface {
 
     public stream() {
         try {
-            if (this.archivepath == null) throw "archive path not valid";
+            if (this.directory == null) throw "archive path not valid";
 
-            for (let file of this.archivehash) {
+            for (let file of this.files) {
                 file.stream({ interval: 1000 }, (data: HashProgress, error) => {
                     // console.log(`${file.}`)
                 }).then((data) => {
