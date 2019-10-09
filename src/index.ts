@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import { join, parse } from 'path';
-import { expectFile, directPath, scandir, printProgressOptions, printProgress, expectDir } from './sdTools';
-import { Hash, HashProgress, HashInterface } from './sdHash';
+import { expectFile, directPath, scandir, printProgressOptions, printProgress, expectDir } from './tools';
+import { Hash, HashProgress, HashInterface } from './hash';
 
 import program = require('commander');
 import readline = require('readline');
-import { Archive } from './sdArchive';
+import { Archive } from './archive';
 
 program
     .version('0.0.1')

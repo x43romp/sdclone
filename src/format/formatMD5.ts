@@ -1,8 +1,8 @@
-import { FormatTemplate } from "./forrmateTemplate";
+import { FormatTemplate } from "./formatTemplate";
 import { readFileSync, writeFileSync } from "fs";
-import { Hash, HashInterface } from "../sdHash";
+import { Hash, HashInterface } from "../hash";
 import { parse, normalize } from "path";
-import { directPath } from "../sdTools";
+import { directPath } from "../tools";
 
 export class FormatMD5 extends FormatTemplate {
 

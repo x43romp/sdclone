@@ -1,5 +1,5 @@
 import { normalize, parse, join } from "path";
-import { expectFile } from "./sdTools";
+import { expectFile } from "./tools";
 import { statSync, createReadStream, createWriteStream } from "fs";
 import { createHash } from "crypto";
 

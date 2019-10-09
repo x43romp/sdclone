@@ -1,8 +1,8 @@
-import { directPath, expectDir } from "../sdTools";
-import { HashInterface } from "../sdHash";
-import { Archive } from "../sdArchive";
+import { directPath, expectDir } from "../tools";
+import { HashInterface } from "../hash";
+import { Archive } from "../archive";
 import { parse, join } from "path";
-import { FormatTemplate } from "./forrmateTemplate";
+import { FormatTemplate } from "./formatTemplate";
 import { FormatMD5 } from "./formatMD5";
 
 export interface FormatInterface {

@@ -1,4 +1,4 @@
-import { HashInterface } from "../sdHash";
+import { HashInterface } from "../hash";
 
 export class FormatTemplate {
     private _directory: string;

@@ -1,8 +1,8 @@
-import { HashInterface, Hash, HashProgress, HashTypes } from "./sdHash";
-import { directPath, expectDir, scandir, printProgress } from "./sdTools";
+import { HashInterface, Hash, HashProgress, HashTypes } from "./hash";
+import { directPath, expectDir, scandir, printProgress } from "./tools";
 import { parse } from "path";
 import { EventEmitter } from "events";
-import { Format } from "./sdFormat";
+import { Format } from "./format";
 
 export type ArchiveStatus = "idle" | "hashing" | "done";
 
