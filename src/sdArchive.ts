@@ -2,6 +2,7 @@ import { HashInterface, Hash, HashProgress, HashTypes } from "./sdHash";
 import { directPath, expectDir, scandir, printProgress } from "./sdTools";
 import { parse } from "path";
 import { EventEmitter } from "events";
+import { Format } from "./sdFormat";
 
 export type ArchiveStatus = "idle" | "hashing" | "done";
 
@@ -52,6 +53,8 @@ export class Archive extends EventEmitter {
                 this._queue.push(data);
             });
         }
+        let format = new Format(this);
+        format.save();
         this.emit('done');
     }
 
