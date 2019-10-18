@@ -35,9 +35,7 @@ export class Format {
     }
 
     save() {
-        let folder = parse(this._directory).base;
-        let filename = `${folder}_${new Date().toISOString()}${this._format.extension}`;
-        let filepath = join(this._directory, filename);
+        let filepath = this.createFileName();
         this._format.save(filepath, this._files);
     }
 
