@@ -46,4 +46,12 @@ export class Format {
     }
 
 
+    createFileName(): string {
+        let ext = (this._format) ? this._format._fileExt : '.md5';
+        let folder = parse(this._directory).base;
+        let date = new Date().toISOString().split(".")[0].split(":").join("").split("T").join("_");
+        let filename = `${folder}_${date}${ext}`;
+        let filepath = join(this._directory, filename);
+        return filepath;
+    }
 }
