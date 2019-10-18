@@ -5,6 +5,8 @@ import { parse, join } from "path";
 import { FormatTemplate } from "./formatTemplate";
 import { FormatMD5 } from "./formatMD5";
 
+export const Formats = [FormatTemplate, FormatMD5];
+
 export interface FormatInterface {
     archivepath: string;
     archivefile?: string;                   // This one is for the archive file *.{md5,mhl}
@@ -51,5 +53,17 @@ export class Format {
         let filename = `${folder}_${date}${ext}`;
         let filepath = join(this._directory, filename);
         return filepath;
+    }
+}
+
+export class FormatLoader {
+    constructor(archivePath: string) {
+        let ext = parse(archivePath).ext;
+        for (let format of Formats) {
+            if (format.extension.includes(ext)) {
+                return new format(archivePath);
+            }
+        }
+        return FormatTemplate;
     }
 }
