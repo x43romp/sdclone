@@ -1,5 +1,5 @@
 import { HashInterface, Hash, HashProgress, HashTypes } from "./hash";
-import { directPath, expectDir, scandir, printProgress } from "./tools";
+import { directPath, expectDir, scandir, printProgress, expectFile } from "./tools";
 import { parse } from "path";
 import { EventEmitter } from "events";
 import { Format } from "./format";
@@ -26,9 +26,18 @@ export class Archive extends EventEmitter {
         super();
 
         // cleanup path
-        this.directory = directPath(path);
-        if (!expectDir(this.directory)) {
+        path = directPath(path);
+        if (expectFile(path)) {
+            // if a file is selected
+            this.directory = parse(path).dir;
+            this.filepath = path;
+        } else if (expectDir(path)) {
+            // if a directory is selected
+            this.directory = path;
+            this.filepath = null;
+        } else {
             this.directory = null;
+            this.filepath = null;
             throw new Error("invalid path - must be a real ")
         }
 
