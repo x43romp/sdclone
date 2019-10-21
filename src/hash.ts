@@ -4,6 +4,7 @@ import { statSync, createReadStream, createWriteStream } from "fs";
 import { createHash } from "crypto";
 
 export type HashTypes = "md5" | "sha1";
+export type HashStatus = "match" | "different" | "outdated" | "not-found" | "new-file";
 
 export interface streamOptions {
     hashtype?: HashTypes;
@@ -30,6 +31,11 @@ export interface HashInterface {
     hashdate?: string;
 }
 
+export interface HashOptions {
+    dir?: string;
+    target?: HashInterface;
+}
+
 export class Hash implements HashInterface {
 
     public filename: string;
@@ -41,25 +47,33 @@ export class Hash implements HashInterface {
     public hashtype: HashTypes;
     public hashdate: string;
 
+    private _target: HashInterface;
+
     /**
      * Create a new Hash object - must define the filepath
      * @param path string filepath
      * @param options optional configurations
      */
-    constructor(path: string, dir?: string) {
-        try {
+    constructor(path: string, options?: HashOptions | string) {
 
-            let filename = path;
-            path = normalize(path);
-            path = (dir) ? join(dir, path) : normalize(path);
-            if (!expectFile(path)) throw "invalid file";
+        // configure options
+        options =
+            (!options) ? {} :
+                (typeof options == "string") ? { dir: options } :
+                    options;
 
-            this.filename = (dir) ? filename : parse(path).base;
-            this.filepath = (dir) ? join(dir, filename) : path;
-            this.filedate = statSync(path).mtime.toISOString();
-            this.filesize = statSync(path).size;
+        let filename = path;
+        path = normalize(path);
+        path = (options.dir) ? join(options.dir, path) : normalize(path);
+        if (!expectFile(path)) throw new Error(`invalid file ${path}`);
 
-        } catch (error) { console.error(error); }
+        this.filename = (options.dir) ? filename : parse(path).base;
+        this.filepath = (options.dir) ? join(options.dir, filename) : path;
+        this.filedate = statSync(path).mtime.toISOString();
+        this.filesize = statSync(path).size;
+
+        // sets target
+        this._target = (options.target) ? options.target : null;
     }
 
     /**
@@ -112,5 +126,18 @@ export class Hash implements HashInterface {
 
             } catch (error) { reject(error); }
         })
+    }
+
+    /**
+     * Compare the current Hash to another HashInterface
+     * @param target HashInterface - the original file to compare to
+     */
+    public compare(target?: HashInterface): HashStatus {
+        target = (target) ? target : this._target;
+        if (!target) throw new Error("No target file");
+
+        if (this.hash == target.hash) return "match";
+        if (target.filedate && target.filedate != this.filedate) return "outdated";
+        return "different";
     }
 }
