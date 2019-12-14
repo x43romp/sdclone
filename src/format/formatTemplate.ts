@@ -8,9 +8,13 @@ export class FormatTemplate {
     private _data: string;
 
     extension: string;
+    static extensions: string[];
 
     constructor(path: string) { }
 
     save(filepath?: string, data?) { }
 
+    read(): HashInterface[] {
+        return [];
+    }
 }
