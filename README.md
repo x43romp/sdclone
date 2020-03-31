@@ -51,6 +51,22 @@ EXAMPLE
 
 _See code: [src/commands/hello.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/hello.ts)_
 
+## `sdclone hash [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ sdclone hash [FILEPATH]
+
+OPTIONS
+  -h, --help       show CLI help
+  -q, --quiet      print only the hash
+  --format .       hash type : md5 | sha
+```
+
+_See code: [src/commands/hash.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/hash.ts)_
+
 ## `sdclone help [COMMAND]`
 
 display help for sdclone
