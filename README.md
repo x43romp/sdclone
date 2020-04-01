@@ -32,6 +32,7 @@ USAGE
 * [`sdclone hello [FILE]`](#sdclone-hello-file)
 * [`sdclone help [COMMAND]`](#sdclone-help-command)
 * [`sdclone seal [PATH]`](#sdclone-seal-path)
+* [`sdclone verify [FILE]`](#sdclone-verify-file)
 
 ## `sdclone hash [FILEPATH]`
 
@@ -104,4 +105,19 @@ OPTIONS
 ```
 
 _See code: [src/commands/seal.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/seal.ts)_
+
+## `sdclone verify [FILE]`
+
+verifies a hashfile
+
+```
+USAGE
+  $ sdclone verify [FILE]
+
+OPTIONS
+  -h, --help   show CLI help
+  -q, --quiet  only show pass/fail/missing
+```
+
+_See code: [src/commands/verify.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/verify.ts)_
 <!-- commandsstop -->

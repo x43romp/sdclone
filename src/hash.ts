@@ -1,6 +1,6 @@
 import { join, normalize, isAbsolute, parse } from 'path'
 import HashTemplate from './formats/_template'
-import { readdirSync, statSync, Stats, writeFile } from 'fs'
+import { readdirSync, statSync, Stats, writeFile, readFileSync, existsSync } from 'fs'
 
 export enum ERRORS {
   'HASH_ERROR_NOTFOUND' = 'ERROR: cannot find format'
@@ -18,11 +18,19 @@ export function directPath(path: string) {
 
 function hashPath(format: FORMATS | string = 'md5') {
   const directory = './formats'
-  return `${directory}/${format}.ts`
+  const path = `${directory}/${format}.ts`
+  const pathLocal = join(__dirname, path)
+  const pathExist = existsSync(pathLocal)
+
+  if (pathExist === false) return false
+  return path
 }
 
 function loadHash(format: FORMATS | string = 'md5') {
-  const hashClass = require(hashPath(format)).default
+  const path = hashPath(format)
+  if (path === false) return false
+
+  const hashClass = require(path).default
   return hashClass
 }
 
@@ -125,4 +133,29 @@ export interface HashSealOptions {
 export interface HashData {
   file: string;
   hash: string;
+}
+
+export interface HashVerifyOptions {
+  quiet?: boolean;
+}
+
+export async function verify(filepath: string, opts?: HashVerifyOptions): Promise<string> {
+  if (!opts) opts = { quiet: false }
+  if (opts?.quiet === null) opts.quiet = false
+
+  const extension = parse(filepath).ext.replace('.', '')
+
+  if (extension === '' || extension === undefined)
+    return 'invalid format'
+
+  const FormatClass = loadHash(extension)
+  if (FormatClass === false) return 'invalid format'
+  const formatClass = new FormatClass() as HashTemplate
+
+  if (existsSync(directPath(filepath)) === false) return `cannot find file ${filepath}`
+
+  const data = await readFileSync(directPath(filepath)).toString()
+  const response = await formatClass.verify(filepath, data, opts)
+
+  return response
 }

@@ -1,4 +1,6 @@
-import { HashData } from '../hash'
+import { HashData, HashVerifyOptions } from '../hash'
+import { parse, join } from 'path'
+import { existsSync } from 'fs'
 
 export default class HashTemplate {
   EXTENSIONS: string[] = []
@@ -24,5 +26,54 @@ export default class HashTemplate {
       return `${line.hash}  ${line.file}`
     })
     return lines.join('\n')
+  }
+
+  public async verify(filepath: string, data: string, opts?: HashVerifyOptions): Promise<string> {
+    const directory = parse(filepath).dir
+
+    while (data.includes('  ')) {
+      data = data.replace('  ', ' ')
+    }
+
+    const lines: HashData[] = data.split('\n').map(line => {
+      const segments = line.split(' ')
+      return { hash: segments[0], file: segments[1] }
+    }).filter(line => {
+      if (line.file) return true
+      return false
+    })
+
+    let passCount = 0
+    let failCount = 0
+    let missCount = 0
+
+    let response: string[] = await Promise.all(lines.map(async line => {
+      const fileExist = existsSync(join(directory, line.file))
+      let lineResp = ''
+      if (fileExist) {
+        const hash: string = await this.hash(join(directory, line.file))
+        lineResp = `${hash} | ${line.hash} | ${line.file}`
+
+        if (hash !== line.hash) {
+          failCount++
+          lineResp = `- | ${lineResp}`
+        } else if (hash === line.hash) {
+          passCount++
+          lineResp = `+ | ${lineResp}`
+        }
+      } else {
+        missCount++
+        lineResp = `x | ${line.hash} | ${line.file}`
+      }
+      return lineResp
+    }))
+    if (opts?.quiet) response = []
+    response.push(`pass ${passCount}`)
+    if (failCount > 0)
+      response.push(`fail ${failCount}`)
+    if (missCount > 0)
+      response.push(`missing ${missCount}`)
+
+    return response.join('\n')
   }
 }
