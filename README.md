@@ -99,8 +99,8 @@ OPTIONS
   -h, --help           show CLI help
   -o, --output=output  output file name
   -q, --quiet          suppress output
-  --encode=encode      [default: md5] encoding format : md5 | sha
-  --format=format      [default: md5] formatting style : mhl | md5
+  --encode=encode      encoding format : md5 | sha
+  --format=format      formatting style : mhl | md5
 ```
 
 _See code: [src/commands/seal.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/seal.ts)_

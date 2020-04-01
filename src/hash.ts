@@ -77,7 +77,8 @@ export async function seal(directory: string, opts?: HashSealOptions): Promise<s
   if (!opts) opts = { dry: false, quiet: false, format: 'md5', encode: 'md5' }
   if (!opts?.dry) opts.dry = false
   if (!opts?.quiet) opts.quiet = false
-  if (!opts?.format) opts.format = 'md5'
+  if (!opts?.format && !opts?.encode) opts.format = 'md5'
+  if (!opts?.format && opts.encode) opts.format = opts.encode
   if (!opts?.encode) opts.encode = opts.format
 
   const FormatClass = loadHash(opts.format)
