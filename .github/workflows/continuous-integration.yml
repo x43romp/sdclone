@@ -2,13 +2,13 @@ name: NPM Test
 on: [push, pull_request]
 
 jobs:
-  testubuntu:
+  npmtest:
     name: npm run test
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-16.04, ubuntu-18.04, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node: [12.x]
 
       fail-fast: true
