@@ -25,12 +25,4 @@ export default class HashTemplate {
     })
     return lines.join('\n')
   }
-
-  public async sealA(directory: string, quiet = false): Promise<string> {
-    return new Promise((resolve, reject) => {
-      if (!directory) reject(directory)
-      if (quiet) resolve('')
-      resolve(directory)
-    })
-  }
 }
