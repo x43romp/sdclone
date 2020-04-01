@@ -1,5 +1,5 @@
 import HashTemplate from './_template'
-import { directPath } from '../hash'
+import { directPath, HashData } from '../hash'
 import { statSync, createReadStream } from 'fs'
 import { cwd } from 'process'
 import { createHash } from 'crypto'
@@ -32,5 +32,9 @@ export default class HashMD5 extends HashTemplate {
 
     const output: string = (quiet) ? hash : `${hash}  ${filepath}`
     return output
+  }
+
+  public seal(data: HashData[] | HashData): string {
+    return super.seal(data)
   }
 }

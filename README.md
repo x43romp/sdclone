@@ -28,8 +28,26 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`sdclone hash [FILEPATH]`](#sdclone-hash-filepath)
 * [`sdclone hello [FILE]`](#sdclone-hello-file)
 * [`sdclone help [COMMAND]`](#sdclone-help-command)
+* [`sdclone seal [PATH]`](#sdclone-seal-path)
+
+## `sdclone hash [FILEPATH]`
+
+describe the command here
+
+```
+USAGE
+  $ sdclone hash [FILEPATH]
+
+OPTIONS
+  -h, --help       show CLI help
+  -q, --quiet      print only the hash
+  --format=format  [default: md5] hash type
+```
+
+_See code: [src/commands/hash.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/hash.ts)_
 
 ## `sdclone hello [FILE]`
 
@@ -51,22 +69,6 @@ EXAMPLE
 
 _See code: [src/commands/hello.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/hello.ts)_
 
-## `sdclone hash [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ sdclone hash [FILEPATH]
-
-OPTIONS
-  -h, --help       show CLI help
-  -q, --quiet      print only the hash
-  --format .       hash type : md5 | sha
-```
-
-_See code: [src/commands/hash.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/hash.ts)_
-
 ## `sdclone help [COMMAND]`
 
 display help for sdclone
@@ -83,4 +85,23 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
+
+## `sdclone seal [PATH]`
+
+creates a hash file for a directory
+
+```
+USAGE
+  $ sdclone seal [PATH]
+
+OPTIONS
+  -d, --dry            run without saving
+  -h, --help           show CLI help
+  -o, --output=output  output file name
+  -q, --quiet          suppress output
+  --encode=encode      [default: md5] encoding format : md5 | sha
+  --format=format      [default: md5] formatting style : mhl | md5
+```
+
+_See code: [src/commands/seal.ts](https://github.com/x43romp/sdclone/blob/v0.0.0/src/commands/seal.ts)_
 <!-- commandsstop -->
