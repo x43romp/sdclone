@@ -1,7 +1,7 @@
 {
   "name": "sdclone",
   "description": "Shadow Clone -- automated copy and hash system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "John Untivero @x43romp",
   "bin": {
     "sdclone": "./bin/run"
@@ -11,7 +11,8 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
-    "tslib": "^1"
+    "tslib": "^1",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
