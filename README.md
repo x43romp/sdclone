@@ -20,7 +20,7 @@ $ npm install -g sdclone
 $ sdclone COMMAND
 running command...
 $ sdclone (-v|--version|version)
-sdclone/0.2.0 darwin-x64 node-v12.16.1
+sdclone/0.2.1 darwin-x64 node-v12.16.1
 $ sdclone --help [COMMAND]
 USAGE
   $ sdclone COMMAND
@@ -48,7 +48,7 @@ OPTIONS
   --format=format  [default: md5] hash type
 ```
 
-_See code: [src/commands/hash.ts](https://github.com/x43romp/sdclone/blob/v0.2.0/src/commands/hash.ts)_
+_See code: [lib/commands/hash.js](https://github.com/x43romp/sdclone/blob/v0.2.1/lib/commands/hash.js)_
 
 ## `sdclone help [COMMAND]`
 
@@ -84,7 +84,7 @@ OPTIONS
   --format=format      formatting style : md5 | sha | mhl
 ```
 
-_See code: [src/commands/seal.ts](https://github.com/x43romp/sdclone/blob/v0.2.0/src/commands/seal.ts)_
+_See code: [lib/commands/seal.js](https://github.com/x43romp/sdclone/blob/v0.2.1/lib/commands/seal.js)_
 
 ## `sdclone verify [FILE]`
 
@@ -99,5 +99,5 @@ OPTIONS
   -q, --quiet  only show pass/fail/missing
 ```
 
-_See code: [src/commands/verify.ts](https://github.com/x43romp/sdclone/blob/v0.2.0/src/commands/verify.ts)_
+_See code: [lib/commands/verify.js](https://github.com/x43romp/sdclone/blob/v0.2.1/lib/commands/verify.js)_
 <!-- commandsstop -->
