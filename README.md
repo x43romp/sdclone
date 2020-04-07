@@ -30,7 +30,6 @@ USAGE
 # Commands
 <!-- commands -->
 * [`sdclone hash [FILEPATH]`](#sdclone-hash-filepath)
-* [`sdclone hello [FILE]`](#sdclone-hello-file)
 * [`sdclone help [COMMAND]`](#sdclone-help-command)
 * [`sdclone seal [PATH]`](#sdclone-seal-path)
 * [`sdclone verify [FILE]`](#sdclone-verify-file)
@@ -50,26 +49,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/hash.ts](https://github.com/x43romp/sdclone/blob/v0.2.0/src/commands/hash.ts)_
-
-## `sdclone hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ sdclone hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ sdclone hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src/commands/hello.ts](https://github.com/x43romp/sdclone/blob/v0.2.0/src/commands/hello.ts)_
 
 ## `sdclone help [COMMAND]`
 
@@ -102,7 +81,7 @@ OPTIONS
   -o, --output=output  output file name
   -q, --quiet          suppress output
   --encode=encode      encoding format : md5 | sha
-  --format=format      formatting style : mhl | md5
+  --format=format      formatting style : md5 | sha | mhl
 ```
 
 _See code: [src/commands/seal.ts](https://github.com/x43romp/sdclone/blob/v0.2.0/src/commands/seal.ts)_
