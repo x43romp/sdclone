@@ -9,7 +9,7 @@ export default class Seal extends Command {
     output: flags.string({ char: 'o', description: 'output file name' }),
     quiet: flags.boolean({ char: 'q', description: 'suppress output' }),
     encode: flags.string({ description: 'encoding format : md5 | sha' }),
-    format: flags.string({ description: 'formatting style : mhl | md5' }),
+    format: flags.string({ description: 'formatting style : md5 | sha | mhl' }),
     dry: flags.boolean({ char: 'd', description: 'run without saving', default: false }),
   }
 

@@ -1,7 +1,7 @@
 {
   "name": "sdclone",
   "description": "Shadow Clone -- automated copy and hash system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "John Untivero @x43romp",
   "bin": {
     "sdclone": "./bin/run"
