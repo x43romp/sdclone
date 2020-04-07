@@ -2,7 +2,9 @@ import HashTemplate from './_template'
 import { HashData, HashVerifyOptions } from '../hash'
 import HashMD5 from './md5'
 import * as OS from 'os'
-import { js2xml } from 'xml-js'
+import { js2xml, xml2js, ElementCompact } from 'xml-js'
+import { parse, join } from 'path'
+import { existsSync } from 'fs'
 
 interface Mhl {
   hashlist_version: string;
@@ -91,7 +93,53 @@ export default class HashMHL extends HashTemplate {
   }
 
   public async verify(filepath: string, data: string, opts?: HashVerifyOptions): Promise<string> {
-    return ''
+    const directory = parse(filepath).dir
+
+    const xml: ElementCompact = xml2js(data, {
+      ignoreDeclaration: true,
+      compact: true,
+    })
+
+    const hashes: HashData[] = xml.hashlist.hash.map((hash: any) => {
+      const data: HashData = {
+        file: hash.file._text,
+        hash: hash.md5._text,
+        size: hash.size._text,
+        lastmodificationdate: hash.lastmodificationdate._text,
+        hashdate: hash.hashdate._text,
+      }
+      return data
+    })
+
+    let passCount = 0
+    let failCount = 0
+    let missCount = 0
+
+    let response: string[] = await Promise.all(hashes.map(async line => {
+      const fileExists = existsSync(join(directory, line.file))
+
+      if (fileExists === false) {
+        missCount++
+        return `x | ${line.hash} | ${line.file}`
+      }
+
+      const hash: string = await this.hash(join(directory, line.file))
+
+      if (hash === line.hash) {
+        passCount++
+        return `+ | ${hash} | ${line.file}`
+      }
+
+      failCount++
+      return `- | ${line.hash} | ${line.hash} | err ${hash}`
+    }))
+
+    if (opts?.quiet) response = []
+    response.push(`pass ${passCount}`)
+    if (failCount > 0) response.push(`fail ${failCount}`)
+    if (missCount > 0) response.push(`missing ${missCount}`)
+
+    return response.join('\n')
   }
 }
 
