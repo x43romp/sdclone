@@ -34,7 +34,9 @@ export default class HashTemplate {
 
     const lines: HashData[] = data.split('\n').map(line => {
       const segments = line.split(' ')
-      return { hash: segments[0], file: segments[1] }
+      const hash: string = segments.shift() as string
+      const filename: string = segments.join(' ')
+      return { hash: hash, file: filename }
     }).filter(line => {
       return (line.file)
     })
