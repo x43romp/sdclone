@@ -96,10 +96,18 @@ export async function seal(directory: string, opts?: HashSealOptions): Promise<s
   const encodeClass = new EncodeClass() as HashTemplate
 
   const files = scanDir(directory, { recursive: true, fullpath: false })
-  const data = await Promise.all(files.map(async file => {
+  const data: HashData[] = await Promise.all(files.map(async file => {
     const filepath = directPath(join(directory, file))
     const filehash = await encodeClass.hash(filepath)
-    return { file: file, hash: filehash }
+    const filestat: Stats = await statSync(filepath)
+    const filedata: HashData = {
+      file: file,
+      hash: filehash,
+      size: filestat.size,
+      hashdate: new Date().toISOString(),
+      lastmodificationdate: filestat.mtime.toISOString(),
+    }
+    return filedata
   }))
 
   const writeData = encodeClass.seal(data)
@@ -115,7 +123,7 @@ export async function seal(directory: string, opts?: HashSealOptions): Promise<s
 
   if (opts.dry === false) {
     writeFile(filename, writeData, err => {
-      if (err) throw new Error(err.message)
+      if (err) throw (err.message)
     })
   }
 
@@ -133,6 +141,9 @@ export interface HashSealOptions {
 export interface HashData {
   file: string;
   hash: string;
+  size?: number;
+  lastmodificationdate?: string;
+  hashdate?: string;
 }
 
 export interface HashVerifyOptions {
