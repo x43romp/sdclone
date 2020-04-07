@@ -3,7 +3,7 @@ import { parse, join } from 'path'
 import { existsSync } from 'fs'
 
 export default class HashTemplate {
-  EXTENSIONS: string[] = []
+  public EXTENSIONS: string[] = []
 
   public async hash(filepath: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -28,20 +28,24 @@ export default class HashTemplate {
     return lines.join('\n')
   }
 
-  public async verify(filepath: string, data: string, opts?: HashVerifyOptions): Promise<string> {
-    const directory = parse(filepath).dir
-
-    while (data.includes('  ')) {
+  public parser(data: string): HashData[] {
+    while (data.includes('  '))
       data = data.replace('  ', ' ')
-    }
 
     const lines: HashData[] = data.split('\n').map(line => {
       const segments = line.split(' ')
       return { hash: segments[0], file: segments[1] }
     }).filter(line => {
-      if (line.file) return true
-      return false
+      return (line.file)
     })
+
+    return lines
+  }
+
+  public async verify(filepath: string, data: string, opts?: HashVerifyOptions): Promise<string> {
+    const directory = parse(filepath).dir
+
+    const lines: HashData[] = this.parser(data)
 
     let passCount = 0
     let failCount = 0
