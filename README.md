@@ -29,10 +29,27 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`sdclone copy [FILE]`](#sdclone-copy-file)
 * [`sdclone hash [FILEPATH]`](#sdclone-hash-filepath)
 * [`sdclone help [COMMAND]`](#sdclone-help-command)
 * [`sdclone seal [PATH]`](#sdclone-seal-path)
 * [`sdclone verify [FILE]`](#sdclone-verify-file)
+
+## `sdclone copy [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ sdclone copy [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/copy.ts](https://github.com/x43romp/sdclone/blob/v0.2.1/src/commands/copy.ts)_
 
 ## `sdclone hash [FILEPATH]`
 
@@ -48,7 +65,7 @@ OPTIONS
   --format=format  [default: md5] hash type
 ```
 
-_See code: [lib/commands/hash.js](https://github.com/x43romp/sdclone/blob/v0.2.1/lib/commands/hash.js)_
+_See code: [src/commands/hash.ts](https://github.com/x43romp/sdclone/blob/v0.2.1/src/commands/hash.ts)_
 
 ## `sdclone help [COMMAND]`
 
@@ -84,7 +101,7 @@ OPTIONS
   --format=format      formatting style : md5 | sha | mhl
 ```
 
-_See code: [lib/commands/seal.js](https://github.com/x43romp/sdclone/blob/v0.2.1/lib/commands/seal.js)_
+_See code: [src/commands/seal.ts](https://github.com/x43romp/sdclone/blob/v0.2.1/src/commands/seal.ts)_
 
 ## `sdclone verify [FILE]`
 
@@ -99,5 +116,5 @@ OPTIONS
   -q, --quiet  only show pass/fail/missing
 ```
 
-_See code: [lib/commands/verify.js](https://github.com/x43romp/sdclone/blob/v0.2.1/lib/commands/verify.js)_
+_See code: [src/commands/verify.ts](https://github.com/x43romp/sdclone/blob/v0.2.1/src/commands/verify.ts)_
 <!-- commandsstop -->

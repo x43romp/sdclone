@@ -5,7 +5,7 @@ import { existsSync } from 'fs'
 export default class HashTemplate {
   public EXTENSIONS: string[] = []
 
-  public async hash(filepath: string): Promise<string> {
+  public async hash(filepath: string, destpath?: string): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!filepath) reject(filepath)
       resolve(filepath)

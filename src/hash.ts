@@ -1,6 +1,6 @@
 import { join, normalize, isAbsolute, parse } from 'path'
 import HashTemplate from './formats/_template'
-import { readdirSync, statSync, Stats, writeFile, readFileSync, existsSync } from 'fs'
+import { readdirSync, statSync, Stats, writeFile, readFileSync, existsSync, mkdirSync } from 'fs'
 
 export enum ERRORS {
   'HASH_ERROR_NOTFOUND' = 'ERROR: cannot find format'
@@ -169,4 +169,54 @@ export async function verify(filepath: string, opts?: HashVerifyOptions): Promis
   const response = await formatClass.verify(filepath, data, opts)
 
   return response
+}
+
+export interface HashCopyOptions {
+  dest?: string
+}
+export async function copy(path: string, opts?: HashCopyOptions, callback?: (data: any, err?: any) => void) {
+  if (!opts?.dest) throw 'destination required'
+
+  const fullpath = directPath(path)
+  const stats = statSync(path)
+  const ext = 'md5'
+
+  if (existsSync(fullpath) === false && stats.isDirectory() === false) throw `path ${fullpath} does not exist`
+
+  let files: string[] = []
+
+  // generate list of files
+  let directory = ''
+  if (stats.isFile()) {
+    directory = parse(fullpath).dir
+    files = (fullpath === path) ? [parse(path).base] : [path]
+  } else if (stats.isDirectory()) {
+    directory = fullpath
+    files = scanDir(fullpath, { fullpath: false, recursive: true })
+  }
+  // console.log(`dir ${directory}`)
+  // console.log(files)
+
+  // target path
+  const dest = opts.dest
+  const targetDir = (parse(dest).ext) ? parse(directPath(dest)).base : directPath(dest)
+
+  mkdirSync(targetDir, { recursive: true })
+
+  const HashClass = loadHash(ext)
+  const hash = new HashClass() as HashTemplate
+  files.forEach(async file => {
+    // console.log(directPath(join(directory, file)))
+    const a = directPath(join(directory, file))
+    const b = join(targetDir, file)
+    // console.log(`${a} --- ${b}`)
+    const h = await hash.hash(a, b)
+    if (callback) {
+      callback(`${h}  ${file}`)
+
+    }
+    // if (callbck)
+    //   callbck(h)
+  })
+  // console.log(files)
 }
