@@ -39,31 +39,27 @@ export interface ScandirOptions {
   fullpath?: boolean;
 }
 
-export function scanDir(dirpath: string, opts?: ScandirOptions): string[] {
+export function scanDir(dirpath: string, { recursive = false, fullpath = false }: ScandirOptions = {}) {
   dirpath = directPath(dirpath)
 
-  let files: string[] = []
   const data = readdirSync(dirpath)
 
-  for (const file of data) {
+  const files: string[] = data.reduce((acc, file) => {
     const filepath = join(dirpath, file)
     const stats: Stats = statSync(filepath)
+    file = (fullpath) ? join(dirpath, file) : file
+    const blank: string[] = []
 
     if (stats.isFile()) {
-      // if file
-      files.push(file)
-    } else if (stats.isDirectory() && opts?.recursive === true) {
-      // if directory
-      // if recursive
-      const subfiles = scanDir(filepath, { recursive: opts?.recursive, fullpath: false })
-        .map(sub => join(file, sub))
-
-      files = files.concat(subfiles)
+      acc.push(file)
+    } else if (stats.isDirectory()) {
+      const subfiles = scanDir(filepath, { recursive: recursive, fullpath: fullpath }) //
+        .map(sub => join(file, sub)) //
+        .forEach(sub => acc.push(file))
     }
-  }
 
-  if (opts?.fullpath)
-    files = files.map(file => join(dirpath, file))
+    return acc
+  }, [] as string[])
 
   return files
 }
