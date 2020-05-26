@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command'
 import { print } from '../hash'
 
 export default class Hash extends Command {
-  static description = 'describe the command here'
+  static description = 'get the hash value of a file'
 
   static flags = {
     help: flags.help({ char: 'h' }),
