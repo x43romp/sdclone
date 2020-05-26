@@ -76,17 +76,15 @@ export function print(filepath: string, quiet = false, format: FORMATS | string 
   return hash.print(filepath, quiet)
 }
 
-export async function seal(directory: string, opts?: HashSealOptions): Promise<string> {
-  // set defaults
-  if (!opts) opts = { dry: false, quiet: false, format: 'md5', encode: 'md5' }
-  if (!opts?.dry) opts.dry = false
-  if (!opts?.quiet) opts.quiet = false
-  if (!opts?.format && !opts?.encode) opts.format = 'md5'
-  if (!opts?.format && opts.encode) opts.format = opts.encode
-  if (!opts?.encode) opts.encode = opts.format
+export async function seal(directory: string, { //
+  dry = false, quiet = false, format = 'md5', //
+  encode = undefined, output = undefined }: HashSealOptions = {}) {
 
-  const FormatClass = loadHash(opts.format)
-  const EncodeClass = loadHash(opts.encode)
+  // set default encode
+  encode = (encode) ? encode : format
+
+  const FormatClass = loadHash(format)
+  const EncodeClass = loadHash(encode)
 
   const formatClass = new FormatClass() as HashTemplate
   const encodeClass = new EncodeClass() as HashTemplate
@@ -94,34 +92,29 @@ export async function seal(directory: string, opts?: HashSealOptions): Promise<s
   const files = scanDir(directory, { recursive: true, fullpath: false })
   const data: HashData[] = await Promise.all(files.map(async file => {
     const filepath = directPath(join(directory, file))
-    const filehash = await encodeClass.hash(filepath)
     const filestat: Stats = await statSync(filepath)
+    const filehash = await encodeClass.hash(filepath)
     const filedata: HashData = {
       file: file,
       hash: filehash,
       size: filestat.size,
-      hashdate: new Date().toISOString(),
       lastmodificationdate: filestat.mtime.toISOString(),
+      hashdate: new Date().toISOString(),
     }
     return filedata
   }))
 
   const writeData = encodeClass.seal(data)
-  let filename: string
+  const filename = (output !== undefined) ? output : //
+    `${parse(directPath(directory)).name}_${ //
+    new Date().toISOString().split('.')[0].replace(/:/g, '').replace('T', '_')}.${ //
+    formatClass.EXTENSIONS[0]}`
 
-  if (opts.output) {
-    filename = opts.output
-  } else {
-    const dirname = parse(directPath(directory)).name
-    const dirdate = new Date().toISOString().split('.')[0].split(':').join('').split('T').join('_')
-    filename = join(directPath(directory), `${dirname}_${dirdate}.${formatClass.EXTENSIONS[0]}`)
-  }
+  if (dry) return writeData
 
-  if (opts.dry === false) {
-    writeFile(filename, writeData, err => {
-      if (err) throw (err.message)
-    })
-  }
+  writeFile(filename, writeData, error => {
+    if (error) throw (error.message)
+  })
 
   return writeData
 }
