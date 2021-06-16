@@ -1,4 +1,6 @@
+import { readdirSync, Stats, statSync } from 'fs'
 import { isAbsolute, join, normalize } from 'path'
+import { extname } from 'path/posix'
 
 /**
  * determine if the current operating system is unix/linux or windows
@@ -22,10 +24,80 @@ export function directPath(path: string): string {
         : ['\\'] // windows
 
     // remove trailing slashes
-    while (trails.includes(path.substr(-1)) && path.length > 1)
-        path = path.slice(0, -1)
+    while (trails.includes(path.substr(-1)) && path.length > 1) path = path.slice(0, -1)
 
     return isAbsolute(path) //
         ? normalize(path) // sends normalized path
         : join(process.cwd(), path) // joins current directory
+}
+
+export interface getFilesProps {
+    recursive?: boolean
+    fullpath?: boolean
+    ignore?: string[]
+    ignExt?: string[]
+}
+
+/**
+ * gets a list of files from a directory
+ * @param {string} directory path to the directory
+ * @param {getFilesProps} config configuration
+ * @returns {string[]}
+ */
+export function getFiles(
+    directory: string,
+    config: getFilesProps = {
+        recursive: false,
+        fullpath: false,
+        ignore: [],
+        ignExt: [],
+    }
+): string[] {
+    //prepare ignore files
+    config.ignore = config.ignore?.map((data) => data.toLowerCase())
+    config.ignExt = config.ignExt?.map((data) => data.toLowerCase())
+
+    // get direct path
+    directory = directPath(directory)
+
+    // get list of files
+    const files: string[] = readdirSync(directory).reduce((acc, path) => {
+        // relative path
+        const pathRel = join(directory, path)
+
+        const pathStats: Stats = statSync(pathRel)
+
+        if (pathStats.isFile()) {
+            // check ignore files
+            while (true) {
+                // ignore if in ignore list
+                if (config.ignore?.includes(path.toLowerCase()) == true) break
+
+                // ignore if in ignore extension list
+                if (config.ignExt?.includes(extname(path).toLowerCase()) == true) break
+
+                // push to list
+                acc.push(path)
+                break
+            }
+        } else if (pathStats.isDirectory() && config.recursive == true) {
+            // return the subfiles
+
+            if (config.ignore?.includes(path.toLowerCase()) != true) {
+                // scan the subdirectory
+                const subConfig: getFilesProps = { ...config, fullpath: false }
+                getFiles(pathRel, subConfig)
+                    // join the current path and subfile
+                    .map((sub) => join(path, sub))
+                    // return subfile
+                    .forEach((sub) => acc.push(sub))
+            }
+        }
+
+        return acc
+    }, [] as string[])
+
+    return config.fullpath === true //
+        ? files.map((path) => join(directory, path)) // return with base directory
+        : files // return base list
 }
