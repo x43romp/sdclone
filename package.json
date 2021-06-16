@@ -1,0 +1,29 @@
+{
+  "name": "sdclone",
+  "version": "0.2.1",
+  "description": "Shadow Clone -- automated copy and hash system",
+  "main": "lib/index.js",
+  "author": "John Untivero <jpuntivero@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "prepack": "rm -rf lib && tsc -b",
+    "build": "tsc",
+    "test": "jest --verbose && eslint ./src --ext .ts"
+  },
+  "dependencies": {
+    "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.2",
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0",
+    "eslint": "^7.28.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.4",
+    "prettier": "^2.3.1",
+    "prettier-eslint": "^12.0.0",
+    "ts-jest": "^27.0.3"
+  }
+}
