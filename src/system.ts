@@ -103,26 +103,26 @@ export function getFiles(
         : files // return base list
 }
 
-export interface ICreatorInfo {
-    name: string
-    username: string
-    hostname: string
-    tool: string
-    startdate: string | Date
-    finishdate: string | Date
-}
-export class CreatorInfo {}
-
+/**
+ * @returns {string} system user (i.e. John Smith)
+ */
 export function getName(): string {
     const stdout: string = execSync('/usr/bin/id -F').toString().trim()
     return stdout
 }
 
+/**
+ * @returns {string} system username (i.e. johnsmith)
+ */
 export function getUsername(): string {
     const stdout: string = execSync('/usr/bin/id -un').toString().trim()
     return stdout
 }
 
+/**
+ *
+ * @returns {string} system hostname {i.e. johnsmith-mbp.lan}
+ */
 export function getHostname(): string {
     const stdout: string = execSync('/bin/hostname').toString().trim()
     return stdout
