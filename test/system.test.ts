@@ -1,5 +1,5 @@
 import { join } from 'path/posix'
-import { directPath, getFiles, getFilesProps } from '../src'
+import { directPath, getFiles, getFilesProps, getHostname, getName, getUsername } from '../lib'
 
 // directPath() tests
 describe('system - directPath()', () => {
@@ -82,7 +82,7 @@ describe('system - getFiles()', () => {
         expect(filesA.length).toBeGreaterThanOrEqual(filesB.length)
     })
 
-    test(`ignore in recursive`, () => {
+    test(`ignore in recursive`, async () => {
         config = { ...config, recursive: true }
         const filesA: string[] = getFiles('.', config)
         const filesB: string[] = getFiles('.', { ...config, ignore: ['node_modules', '.git'] })
@@ -90,4 +90,31 @@ describe('system - getFiles()', () => {
     })
 
     test.todo(`ignore works with regex`)
+})
+
+describe('system - creatorinfo methods', () => {
+    let config = {
+        name: '',
+        username: '',
+        hostname: '',
+    }
+
+    beforeAll(() => {
+        config = require('./system.config.json')
+    })
+
+    test('getName()', () => {
+        const name: string = getName()
+        expect(name).toEqual(config['name'])
+    })
+
+    test('getUsername()', () => {
+        const username: string = getUsername()
+        expect(username).toEqual(config['username'])
+    })
+
+    test('getHostname()', () => {
+        const hostname: string = getHostname()
+        expect(hostname).toEqual(config['hostname'])
+    })
 })

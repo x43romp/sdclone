@@ -1,3 +1,4 @@
+import { execSync } from 'child_process'
 import { readdirSync, Stats, statSync } from 'fs'
 import { isAbsolute, join, normalize } from 'path'
 import { extname } from 'path/posix'
@@ -100,4 +101,29 @@ export function getFiles(
     return config.fullpath === true //
         ? files.map((path) => join(directory, path)) // return with base directory
         : files // return base list
+}
+
+export interface ICreatorInfo {
+    name: string
+    username: string
+    hostname: string
+    tool: string
+    startdate: string | Date
+    finishdate: string | Date
+}
+export class CreatorInfo {}
+
+export function getName(): string {
+    const stdout: string = execSync('/usr/bin/id -F').toString().trim()
+    return stdout
+}
+
+export function getUsername(): string {
+    const stdout: string = execSync('/usr/bin/id -un').toString().trim()
+    return stdout
+}
+
+export function getHostname(): string {
+    const stdout: string = execSync('/bin/hostname').toString().trim()
+    return stdout
 }
