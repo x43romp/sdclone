@@ -69,7 +69,7 @@ export function getFiles(
 
         if (pathStats.isFile()) {
             // check ignore files
-            while (true) {
+            for (;;) {
                 // ignore if in ignore list
                 if (config.ignore?.includes(path.toLowerCase()) == true) break
 
