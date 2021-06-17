@@ -1,5 +1,5 @@
 import { join } from 'path/posix'
-import { directPath, getFiles, getFilesProps, getHostname, getName, getUsername } from '../lib'
+import { directPath, getFiles, getFilesProps, getHostname, getName, getUsername, toISOString } from '../lib'
 
 // directPath() tests
 describe('system - directPath()', () => {
@@ -116,5 +116,22 @@ describe('system - creatorinfo methods', () => {
     test('getHostname()', () => {
         const hostname: string = getHostname()
         expect(hostname).toEqual(config['hostname'])
+    })
+})
+
+describe('system - toISOString', () => {
+
+    test('1994-03-26T00:43:00Z', () => {
+        const input: string = '1994-03-26T00:43:00Z'
+        const output: string = '1994-03-26T00:43:00Z'
+        const date: string = toISOString(input)
+        expect(date).toEqual(output)
+    })
+
+    test('1994-03-26T00:43:00.000Z', () => {
+        const input: string = '1994-03-26T00:43:00.000Z'
+        const output: string = '1994-03-26T00:43:00Z'
+        const date: string = toISOString(input)
+        expect(date).toEqual(output)
     })
 })

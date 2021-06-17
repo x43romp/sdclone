@@ -127,3 +127,14 @@ export function getHostname(): string {
     const stdout: string = execSync('/bin/hostname').toString().trim()
     return stdout
 }
+
+/**
+ *
+ * @param { Date | string } date date to convert
+ * @returns
+ */
+export function toISOString(date: Date | string | number = new Date()) {
+    const d: Date = new Date(date)
+    const s: string = d.toISOString()
+    return s.replace(/.\d{3}Z/, 'Z')
+}
